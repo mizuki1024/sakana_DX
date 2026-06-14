@@ -1,0 +1,100 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(STAFF)
+  createdAt DateTime @default(now())
+}
+
+enum Role {
+  ADMIN
+  STAFF
+  BUYER
+}
+
+model Supplier {
+  id        String    @id @default(cuid())
+  name      String
+  code      String    @unique
+  contact   String?
+  landings  Landing[]
+  createdAt DateTime  @default(now())
+}
+
+model Landing {
+  id              String        @id @default(cuid())
+  date            DateTime
+  supplierId      String
+  supplier        Supplier      @relation(fields: [supplierId], references: [id])
+  fishType        String
+  lotNumber       String        @unique
+  weight          Float
+  grade           String?
+  storageLocation String?
+  photoUrl        String?
+  status          LandingStatus @default(LANDED)
+  sales           Sale[]
+  createdAt       DateTime      @default(now())
+}
+
+enum LandingStatus {
+  LANDED
+  SOLD
+  INVOICED
+}
+
+model Buyer {
+  id        String    @id @default(cuid())
+  name      String
+  code      String    @unique
+  email     String?
+  phone     String?
+  sales     Sale[]
+  invoices  Invoice[]
+  createdAt DateTime  @default(now())
+}
+
+model Sale {
+  id        String   @id @default(cuid())
+  landingId String
+  landing   Landing  @relation(fields: [landingId], references: [id])
+  buyerId   String
+  buyer     Buyer    @relation(fields: [buyerId], references: [id])
+  price     Float
+  saleDate  DateTime @default(now())
+  invoiceId String?
+  invoice   Invoice? @relation(fields: [invoiceId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Invoice {
+  id          String        @id @default(cuid())
+  buyerId     String
+  buyer       Buyer         @relation(fields: [buyerId], references: [id])
+  month       String        // YYYY-MM format
+  totalAmount Float
+  pdfUrl      String?
+  status      InvoiceStatus @default(DRAFT)
+  sales       Sale[]
+  createdAt   DateTime      @default(now())
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+}
