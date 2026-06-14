@@ -2,8 +2,9 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useState } from "react"
 import { cn } from "@/lib/utils"
-import { Home, Fish, DollarSign, FileText, Users, Truck } from "lucide-react"
+import { Home, Fish, DollarSign, FileText, Users, Truck, Menu, X } from "lucide-react"
 
 const navigation = [
   { name: "ダッシュボード", href: "/", icon: Home },
@@ -19,6 +20,7 @@ const masterNavigation = [
 
 export function Sidebar() {
   const pathname = usePathname()
+  const [isOpen, setIsOpen] = useState(false)
 
   const renderNavItem = (item: { name: string; href: string; icon: React.ElementType }) => {
     const isActive = item.href === "/"
@@ -28,8 +30,9 @@ export function Sidebar() {
       <Link
         key={item.name}
         href={item.href}
+        onClick={() => setIsOpen(false)}
         className={cn(
-          "group flex items-center px-2 py-2 text-sm font-medium rounded-md",
+          "group flex items-center px-3 py-3 text-sm font-medium rounded-md",
           isActive
             ? "bg-gray-800 text-white"
             : "text-gray-300 hover:bg-gray-700 hover:text-white"
@@ -46,17 +49,23 @@ export function Sidebar() {
     )
   }
 
-  return (
-    <div className="flex h-full w-64 flex-col bg-gray-900">
-      <div className="flex h-16 items-center justify-center border-b border-gray-800">
-        <h1 className="text-xl font-bold text-white">漁市場デジタル台帳</h1>
+  const navContent = (
+    <>
+      <div className="flex h-16 items-center justify-between px-4 border-b border-gray-800">
+        <h1 className="text-lg font-bold text-white">漁市場デジタル台帳</h1>
+        <button
+          onClick={() => setIsOpen(false)}
+          className="md:hidden text-gray-400 hover:text-white"
+        >
+          <X className="h-6 w-6" />
+        </button>
       </div>
-      <nav className="flex-1 px-2 py-4">
+      <nav className="flex-1 px-2 py-4 overflow-y-auto">
         <div className="space-y-1">
           {navigation.map(renderNavItem)}
         </div>
         <div className="mt-6 pt-4 border-t border-gray-800">
-          <p className="px-2 mb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+          <p className="px-3 mb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
             マスタ管理
           </p>
           <div className="space-y-1">
@@ -64,6 +73,42 @@ export function Sidebar() {
           </div>
         </div>
       </nav>
-    </div>
+    </>
+  )
+
+  return (
+    <>
+      {/* Mobile menu button */}
+      <button
+        onClick={() => setIsOpen(true)}
+        className="md:hidden fixed top-4 left-4 z-40 p-2 rounded-md bg-gray-900 text-white shadow-lg"
+        aria-label="メニューを開く"
+      >
+        <Menu className="h-6 w-6" />
+      </button>
+
+      {/* Mobile overlay */}
+      {isOpen && (
+        <div
+          className="md:hidden fixed inset-0 z-40 bg-black/50"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
+      {/* Mobile sidebar */}
+      <div
+        className={cn(
+          "md:hidden fixed inset-y-0 left-0 z-50 w-72 bg-gray-900 transform transition-transform duration-300 ease-in-out",
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        )}
+      >
+        {navContent}
+      </div>
+
+      {/* Desktop sidebar */}
+      <div className="hidden md:flex h-full w-64 flex-col bg-gray-900">
+        {navContent}
+      </div>
+    </>
   )
 }
