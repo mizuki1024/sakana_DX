@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
+import { ExportButton } from "@/components/export-button"
 
 type Sale = {
   id: string
@@ -61,9 +62,12 @@ export default function SalesPage() {
           <h1 className="text-3xl font-bold text-gray-900">売上管理</h1>
           <p className="mt-2 text-gray-600">売上情報の一覧と管理</p>
         </div>
-        <Link href="/sales/new">
-          <Button>新規販売登録</Button>
-        </Link>
+        <div className="flex gap-2">
+          <ExportButton endpoint="/api/sales/export" />
+          <Link href="/sales/new">
+            <Button>新規販売登録</Button>
+          </Link>
+        </div>
       </div>
 
       <Card>

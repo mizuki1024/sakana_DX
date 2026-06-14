@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { supplierSchema } from "@/lib/validations"
 import { z } from "zod"
+import { Prisma } from "@prisma/client"
 
 export async function GET() {
   try {
@@ -56,6 +57,15 @@ export async function POST(request: Request) {
         { error: "Validation failed", details: error.errors },
         { status: 400 }
       )
+    }
+
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2002") {
+        return NextResponse.json(
+          { error: "このコードは既に使用されています" },
+          { status: 400 }
+        )
+      }
     }
 
     return NextResponse.json(

@@ -35,3 +35,30 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Print styles */
+@media print {
+  body {
+    background: white;
+  }
+
+  /* Hide sidebar and header when printing */
+  nav,
+  header,
+  .print\\:hidden {
+    display: none !important;
+  }
+
+  /* Make main content full width */
+  main {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  /* A4 page setup */
+  @page {
+    size: A4;
+    margin: 15mm;
+  }
+}

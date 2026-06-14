@@ -98,3 +98,18 @@ enum InvoiceStatus {
   SENT
   PAID
 }
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String?
+  userEmail  String?
+  action     String   // CREATE, UPDATE, DELETE, STATUS_CHANGE
+  entityType String   // Invoice, Sale, Landing, Buyer, Supplier
+  entityId   String
+  oldValue   String?  // JSON string
+  newValue   String?  // JSON string
+  createdAt  DateTime @default(now())
+
+  @@index([entityType, entityId])
+  @@index([createdAt])
+}

@@ -41,6 +41,22 @@ export const supplierSchema = z.object({
   contact: z.string().optional().nullable(),
 })
 
+// Buyer validation schema
+export const buyerSchema = z.object({
+  name: z.string().min(1, "Buyer name is required"),
+  code: z.string().min(1, "Buyer code is required"),
+  email: z.string().email("Invalid email format").optional().nullable().or(z.literal("")),
+  phone: z.string().optional().nullable(),
+})
+
+// Invoice validation schema
+export const invoiceSchema = z.object({
+  buyerId: z.string().min(1, "買受人を選択してください"),
+  month: z.string().regex(/^\d{4}-\d{2}$/, "対象月をYYYY-MM形式で入力してください"),
+})
+
 export type LandingInput = z.infer<typeof landingSchema>
 export type SaleInput = z.infer<typeof saleSchema>
 export type SupplierInput = z.infer<typeof supplierSchema>
+export type BuyerInput = z.infer<typeof buyerSchema>
+export type InvoiceInput = z.infer<typeof invoiceSchema>

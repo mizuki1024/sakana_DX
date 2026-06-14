@@ -7,6 +7,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
+import { ExportButton } from "@/components/export-button"
 
 const statusLabels = {
   LANDED: "水揚げ済み",
@@ -37,12 +38,15 @@ export default async function LandingsPage() {
           <h1 className="text-3xl font-bold text-gray-900">水揚げ管理</h1>
           <p className="mt-2 text-gray-600">水揚げ情報の一覧と管理</p>
         </div>
-        <Link href="/landings/new">
-          <Button>
-            <Plus className="mr-2 h-4 w-4" />
-            新規登録
-          </Button>
-        </Link>
+        <div className="flex gap-2">
+          <ExportButton endpoint="/api/landings/export" />
+          <Link href="/landings/new">
+            <Button>
+              <Plus className="mr-2 h-4 w-4" />
+              新規登録
+            </Button>
+          </Link>
+        </div>
       </div>
 
       <Card>

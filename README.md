@@ -89,6 +89,17 @@ src/
 - ✅ 売上管理ページ（枠のみ）
 - ✅ 請求管理ページ（枠のみ）
 
+## 実運用化ドキュメント
+
+このプロジェクトを1社目PoCで使える運用レベルに上げるためのドキュメントを `docs/` に配置しています。
+
+- `AGENTS.md` - AIエージェントが守るプロジェクト共通ルール
+- `docs/agent-operating-system.md` - 役割別エージェント体制
+- `docs/operations-roadmap.md` - 実運用化ロードマップ
+- `docs/mvp-requirements.md` - 1社目PoC向けMVP要件
+- `docs/demo-script.md` - 初回営業デモ台本
+- `docs/release-checklist.md` - 本番・PoC前チェックリスト
+
 ## スクリプト
 
 - `npm run dev` - 開発サーバー起動
